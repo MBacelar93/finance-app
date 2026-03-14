@@ -54,7 +54,7 @@ app.post('/api/transactions', (req, res)=> {
 
 });
 
-app.get('/api/trasactions/:id', (req, res)=> {
+app.get('/api/transactions/:id', (req, res)=> {
     const {id} = req.params;
 
     const transacao = {
@@ -75,4 +75,9 @@ app.delete('/api/transactions/:id', (req, res)=> {
         message: `Transação ${id} deletada com sucesso`,
         id: id
     });
+});
+
+app.listen(PORT, ()=> {
+    console.log(`✅ Servidor rodando em http://localhost:${PORT}`);
+    console.log(`📡 Acesse: http://localhost:${PORT}/api/transactions`);
 });
