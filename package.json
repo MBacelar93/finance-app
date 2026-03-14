@@ -1,0 +1,31 @@
+{
+  "name": "finance-app",
+  "version": "1.0.0",
+  "description": "Um aplicativo web moderno para controlar suas despesas e receitas com uma interface intuitiva e responsiva.",
+  "main": "app.js",
+  "scripts": {
+  "start": "node app.js",
+  "dev": "nodemon app.js"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MBacelar93/finance-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/MBacelar93/finance-app/issues"
+  },
+  "homepage": "https://github.com/MBacelar93/finance-app#readme",
+  "dependencies": {
+    "body-parser": "^2.2.2",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "sqlite3": "^6.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
