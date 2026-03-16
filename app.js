@@ -15,14 +15,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // ========== ROTAS DA API ==========
 
+
+
 // 1. GET - Listar todas as transações
 app.get('/api/transactions', (req, res) => {
-    Transaction.getAll((err, transacoes) => {
-        if (err) {
-            return res.status(500).json({ error: 'Erro ao buscar transações' });
-        }
-        res.json(transacoes);
-    });
+  Transaction.getAll((err, transacoes) => {
+    if (err) {
+      return res.status(500).json({ error: 'Erro ao buscar transações' });
+    }
+    res.json(transacoes);
+  });
 });
 
 
@@ -104,6 +106,10 @@ app.get('/api/summary', (req, res) => {
     });
 });
 
+// ========== SERVIR INDEX.HTML ==========
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'index.html'));
+});
 
 // ========== SERVIDOR ==========
 app.listen(PORT, () => {

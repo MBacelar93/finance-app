@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Sistema de Gestão de Finanças Pessoais - Controle suas despesas e receitas">
     <title>Gestor de Finanças - Controle Financeiro Pessoal</title>
-    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <header class="app-header">
@@ -18,7 +18,7 @@
     <main class="app-main">
         <div class="container">
             <section class="summary-section">
-                <h2>Reusmo Financeiro</h2>
+                <h2>Resumo Financeiro</h2>
                 <div class="summary-cards" id="summary-container">
                     <div class="summary-card income">
                         <span class="summary-label">Receita Total</span>
@@ -37,11 +37,11 @@
 
             <section class="form-section">
                 <h2>Adicionar Transação</h2>
-                <form action="" id="transaction-form" class="transaction-form">
+                <form action="" id="transaction-form" class="transaction-form" novalidate>
                     <div class="form-group">
                         <label for="type">Tipo *</label>
                         <select name="type" id="type" required>
-                            <option value=" ">Seleceione um tipo</option>
+                            <option value="">Selecione um tipo</option>
                             <option value="income">Receita</option>
                             <option value="expense">Despesa</option>
                         </select>
@@ -67,18 +67,18 @@
                         <input type="date" name="date" id="date" required>
                     </div>
 
-                    <button type="submit" class="btn-primary btn" >Adicionar</button>
+                    <button type="submit" class="btn-primary btn">Adicionar</button>
                 </form>
 
                 <div id="form-message" class="form-message"></div>
 
             </section>
 
-            <section class="transactions-section" id="transactions-list">
+            <section class="transactions-section" id="transactions-section">
                 <h2>Histórico de Transações</h2>
 
                 <div id="transactions-list" class="transactions-list">
-                    <p class="empty-message">Nenhuma transição adcionada ainda</p>
+                    <p class="empty-message">Nenhuma transação adicionada ainda</p>
                 </div>
             </section>
         </div>
