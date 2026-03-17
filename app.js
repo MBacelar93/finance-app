@@ -19,7 +19,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // 1. GET - Listar todas as transações
 app.get('/api/transactions', (req, res) => {
-  Transaction.getAll((err, transacoes) => {
+    const { type, dateStart, dateEnd } = req.query
+  Transaction.getAll({ type, dateStart, dateEnd }, (err, transacoes) => {
     if (err) {
       return res.status(500).json({ error: 'Erro ao buscar transações' });
     }

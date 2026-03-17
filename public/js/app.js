@@ -4,6 +4,12 @@ const API_URL = 'http://localhost:3000/api';
 // ========== VARIÁVEIS GLOBAIS ==========
 let form, typeInput, categoryInput, descriptionInput, amountInput, dateInput;
 let transactionsList, formMessage, totalIncomeElement, totalExpenseElement, totalBalanceElement;
+let filterTypeSelect, filterDateStartInput, filterDateEndInput, btnApplyFilters, btnClearFilters;
+
+// ========== VARIÁVEIS DE FILTRO ==========
+let filterType = '';
+let filterDateStart = '';
+let filterDateEnd = '';
 
 // ========== FUNÇÕES GLOBAIS ==========
 
@@ -17,8 +23,15 @@ function formatCurrency(value) {
 
 // Formatar Data
 function formatDate(dateString){
+    // Dividir a string YYYY-MM-DD
+    const [year, month, day] = dateString.split('-');
+    
+    // Criar data sem fuso horário
+    const date = new Date(year, month - 1, day);
+    
+    // Formatar
     const options = {year: 'numeric', month: '2-digit', day: '2-digit'};
-    return new Date(dateString).toLocaleDateString('pt-BR', options);
+    return date.toLocaleDateString('pt-BR', options);
 }
 
 // Mensagem de Sucesso/Erro
@@ -32,9 +45,51 @@ function showMessage(message, type) {
     }, 3000);
 }
 
-// Buscar todas as transações do banco
+// ========== FUNÇÕES DE FILTRO ==========
+
+// Aplicar filtros
+function applyFilters() {
+    console.log('🔍 Aplicando filtros:', {
+        type: filterType,
+        dateStart: filterDateStart,
+        dateEnd: filterDateEnd
+    });
+    
+    fetchTransactions();
+}
+
+// Limpar filtros
+function clearFilters() {
+    filterType = '';
+    filterDateStart = '';
+    filterDateEnd = '';
+    
+    // Limpar inputs
+    filterTypeSelect.value = '';
+    filterDateStartInput.value = '';
+    filterDateEndInput.value = '';
+    
+    console.log('🧹 Filtros limpos');
+    fetchTransactions();
+}
+
+// Buscar todas as transações com filtros
 function fetchTransactions(){
-    fetch(`${API_URL}/transactions`)
+    let url = `${API_URL}/transactions`;
+    
+    // Construir query string com filtros
+    const params = new URLSearchParams();
+    if (filterType) params.append('type', filterType);
+    if (filterDateStart) params.append('dateStart', filterDateStart);
+    if (filterDateEnd) params.append('dateEnd', filterDateEnd);
+    
+    if (params.toString()) {
+        url += '?' + params.toString();
+    }
+    
+    console.log('📡 Buscando:', url);
+    
+    fetch(url)
     .then(response => {
         if(!response.ok) {
             throw new Error('Erro ao buscar transações');
@@ -128,7 +183,7 @@ function deleteTransaction(id) {
     .then(data=> {
         console.log('✅ Transação deletada:', data);
         showMessage('Transação deletada com sucesso!', 'success');
-        loadData(); // Recarregar sem dar reload()
+        loadData();
     })
     .catch(error => {
         console.error('❌ Erro:', error);
@@ -189,7 +244,21 @@ window.addEventListener('DOMContentLoaded', () => {
     totalExpenseElement = document.getElementById('total-expense');
     totalBalanceElement = document.getElementById('total-balance');
 
-    // ========== EVENT LISTENERS ==========
+    // ========== SELETORES DOS FILTROS ==========
+    filterTypeSelect = document.getElementById('filter-type');
+    filterDateStartInput = document.getElementById('filter-date-start');
+    filterDateEndInput = document.getElementById('filter-date-end');
+    btnApplyFilters = document.getElementById('btn-apply-filters');
+    btnClearFilters = document.getElementById('btn-clear-filters');
+
+    console.log('🔍 Debug Filtros:');
+    console.log('filterTypeSelect:', filterTypeSelect);
+    console.log('filterDateStartInput:', filterDateStartInput);
+    console.log('filterDateEndInput:', filterDateEndInput);
+    console.log('btnApplyFilters:', btnApplyFilters);
+    console.log('btnClearFilters:', btnClearFilters);
+
+    // ========== EVENT LISTENERS DO FORMULÁRIO ==========
 
     // Validação e submissão do formulário
     form.addEventListener('submit', (e)=> {
@@ -215,6 +284,54 @@ window.addEventListener('DOMContentLoaded', () => {
         // Enviar para API
         createTransaction(novaTransacao);
     });
+
+    // ========== EVENT LISTENERS DOS FILTROS ==========
+
+    // Quando mudar o tipo
+    if (filterTypeSelect) {
+        filterTypeSelect.addEventListener('change', (e) => {
+            filterType = e.target.value;
+            console.log('📊 Tipo filtrado:', filterType);
+        });
+    }
+
+    // Quando mudar data inicial
+    if (filterDateStartInput) {
+        filterDateStartInput.addEventListener('change', (e) => {
+            filterDateStart = e.target.value;
+            console.log('📅 Data inicial:', filterDateStart);
+        });
+    }
+
+    // Quando mudar data final
+    if (filterDateEndInput) {
+        filterDateEndInput.addEventListener('change', (e) => {
+            filterDateEnd = e.target.value;
+            console.log('📅 Data final:', filterDateEnd);
+        });
+    }
+
+    // Botão Aplicar Filtros
+    if (btnApplyFilters) {
+        console.log('✅ Adicionando listener ao botão Aplicar Filtros');
+        btnApplyFilters.addEventListener('click', () => {
+            console.log('🔍 Botão Aplicar Filtros clicado!');
+            applyFilters();
+        });
+    } else {
+        console.error('❌ Botão Aplicar Filtros não encontrado!');
+    }
+
+    // Botão Limpar Filtros
+    if (btnClearFilters) {
+        console.log('✅ Adicionando listener ao botão Limpar Filtros');
+        btnClearFilters.addEventListener('click', () => {
+            console.log('🧹 Botão Limpar Filtros clicado!');
+            clearFilters();
+        });
+    } else {
+        console.error('❌ Botão Limpar Filtros não encontrado!');
+    }
 
     // Carregar dados iniciais
     loadData();

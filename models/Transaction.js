@@ -1,18 +1,45 @@
 const db = require('../config/database');
 
 const Transaction = {
-    getAll: (callback) => {
-        const sql = 'SELECT * FROM transactions ORDER BY date DESC';
+    getAll: (filters = {}, callback) => {
+  // Se filters for função (chamada antiga sem filtros)
+  if (typeof filters === 'function') {
+    callback = filters;
+    filters = {};
+  }
 
-        db.all(sql, (err, rows) => {
-            if (err) {
-                console.error('❌ Erro ao buscar transações:', err);
-                callback(err, null);
-            } else {
-                callback(null, rows);
-            }
-        });
-    },
+  let sql = 'SELECT * FROM transactions WHERE 1=1';
+  const params = [];
+
+  // Filtro por tipo
+  if (filters.type) {
+    sql += ' AND type = ?';
+    params.push(filters.type);
+  }
+
+  // Filtro por data inicial
+  if (filters.dateStart) {
+    sql += ' AND date >= ?';
+    params.push(filters.dateStart);
+  }
+
+  // Filtro por data final
+  if (filters.dateEnd) {
+    sql += ' AND date <= ?';
+    params.push(filters.dateEnd);
+  }
+
+  sql += ' ORDER BY date DESC';
+
+  db.all(sql, params, (err, rows) => {
+    if (err) {
+      console.error('❌ Erro ao buscar transações:', err);
+      callback(err, null);
+    } else {
+      callback(null, rows);
+    }
+  });
+},
 
     getById: (id, callback) => {
         const sql = 'SELECT * FROM transactions WHERE id = ?';
