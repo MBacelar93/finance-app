@@ -20,12 +20,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 1. GET - Listar todas as transações
 app.get('/api/transactions', (req, res) => {
     const { type, dateStart, dateEnd } = req.query
-  Transaction.getAll({ type, dateStart, dateEnd }, (err, transacoes) => {
-    if (err) {
-      return res.status(500).json({ error: 'Erro ao buscar transações' });
-    }
-    res.json(transacoes);
-  });
+    Transaction.getAll({ type, dateStart, dateEnd }, (err, transacoes) => {
+        if (err) {
+            return res.status(500).json({ error: 'Erro ao buscar transações' });
+        }
+        res.json(transacoes);
+    });
 });
 
 
@@ -38,7 +38,7 @@ app.post('/api/transactions', (req, res) => {
             error: 'Campos obrigatórios faltando: type, category, amount, date'
         });
     }
-    
+
     Transaction.create(req.body, (err, novaTransacao) => {
         if (err) {
             return res.status(400).json({ error: err.message });
@@ -74,7 +74,7 @@ app.put('/api/transactions/:id', (req, res) => {
             error: 'Campos obrigatórios faltando: type, category, amount, date'
         });
     }
-    
+
     Transaction.update(id, req.body, (err, transacaoAtualizada) => {
         if (err) {
             return res.status(400).json({ error: err.message });
@@ -109,7 +109,7 @@ app.get('/api/summary', (req, res) => {
 
 // ========== SERVIR INDEX.HTML ==========
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'index.html'));
+    res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
 // ========== SERVIDOR ==========

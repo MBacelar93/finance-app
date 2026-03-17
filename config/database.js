@@ -1,14 +1,14 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
-const dbPath = path.join (__dirname, '..', 'finance.db');
+const dbPath = path.join(__dirname, '..', 'finance.db');
 
-const db = new sqlite3.Database(dbPath, (err)=> {
-    if (err) {
-        console.error('❌ Erro ao conectar ao banco de dados:', err.message);
-    }else {
-          console.log('✅ Conectado ao SQLite');
-    }
+const db = new sqlite3.Database(dbPath, (err) => {
+  if (err) {
+    console.error('❌ Erro ao conectar ao banco de dados:', err.message);
+  } else {
+    console.log('✅ Conectado ao SQLite');
+  }
 });
 
 db.run(`
@@ -19,7 +19,8 @@ db.run(`
     description TEXT,
     amount DECIMAL(10, 2) NOT NULL,
     date DATE NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )
 `, (err) => {
   if (err) {
